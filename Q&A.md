@@ -29,4 +29,4 @@
 - *7、TBM计算该条语句的key, 并将handler作为data, 并调用IM的insert, 建立索引*
 - *8、IM利用DM提供的read和insert等操作, 将key和data存入索引中*
 - *9、TBM返回客户端插入成功的信息*
-  <u>111</u>
+
