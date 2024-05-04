@@ -13,6 +13,10 @@ import top.guoziyang.mydb.backend.utils.Parser;
  * Node结构如下：
  * [LeafFlag][KeyNumber][SiblingUid]
  * [Son0][Key0][Son1][Key1]...[SonN][KeyN]
+ *
+ * 其中 LeafFlag 标记了该节点是否是个叶子节点；KeyNumber 为该节点中 key 的个数；
+ * SiblingUid 是其兄弟节点存储在 DM 中的 UID。后续是穿插的子节点（SonN）和 KeyN。
+ * 最后的一个 KeyN 始终为 MAX_VALUE，以此方便查找
  */
 public class Node {
     static final int IS_LEAF_OFFSET = 0;

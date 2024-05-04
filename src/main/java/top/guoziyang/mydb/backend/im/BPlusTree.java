@@ -15,6 +15,13 @@ import top.guoziyang.mydb.backend.im.Node.SearchNextRes;
 import top.guoziyang.mydb.backend.tm.TransactionManagerImpl;
 import top.guoziyang.mydb.backend.utils.Parser;
 
+
+/*
+ * 二叉树由一个个 Node 组成，每个 Node 都存储在一条 DataItem 中。结构如下：
+ * [LeafFlag][KeyNumber][SiblingUid]
+ * [Son0][Key0][Son1][Key1]...[SonN][KeyN]
+ *
+ */
 public class BPlusTree {
     DataManager dm;
     long bootUid;
