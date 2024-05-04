@@ -4,5 +4,7 @@
 - DM(Data Manager):直接管理数据库DB文件和日志文件。DM的主要职责：\
   1.分页管理DB文件，并进行缓存；\
   2.管理日志文件，保证在发生错误的时候可以根据日志进行恢复；\
-  3.抽象DB文件为DataItem供上层模块使用，并提供缓存。\
-- VM(Version Manager):
+  3.抽象DB文件为DataItem供上层模块使用，并提供缓存
+- VM(Version Manager):基于两段锁协议实现了调度序列的可串行化，并实现了MVCC以消除读写阻塞。同时实现了两种隔离级别（读提交和可重复读）
+- IM(Index Manager):实现了基于B+树的索引，BTW????,目前where只支持已索引字段
+- TBM(Table Manager):实现了对字段和表的管理。同时解析SQL语句，并根据语句操作表
