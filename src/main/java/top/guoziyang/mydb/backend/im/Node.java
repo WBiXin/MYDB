@@ -15,7 +15,7 @@ import top.guoziyang.mydb.backend.utils.Parser;
  * [Son0][Key0][Son1][Key1]...[SonN][KeyN]
  *
  * 其中 LeafFlag 标记了该节点是否是个叶子节点；KeyNumber 为该节点中 key 的个数；
- * SiblingUid 是其兄弟节点存储在 DM 中的 UID。后续是穿插的子节点（SonN）和 KeyN。
+ * SiblingUid 是其兄弟节点存储在 DM 中的 UID。后续是穿插的子节点（SonN）和 KeyN。(Keyn记录Sonn+1页的最小值？)
  * 最后的一个 KeyN 始终为 MAX_VALUE，以此方便查找
  */
 public class Node {
@@ -27,6 +27,7 @@ public class Node {
     static final int BALANCE_NUMBER = 32;
     static final int NODE_SIZE = NODE_HEADER_SIZE + (2*8)*(BALANCE_NUMBER*2+2);
 
+    //Node 类持有了其 B+ 树结构的引用，DataItem 的引用和 SubArray 的引用，用于方便快速修改数据和释放数据
     BPlusTree tree;
     DataItem dataItem;
     SubArray raw;
@@ -93,6 +94,8 @@ public class Node {
         }
     }
 
+    // 生成一个根节点的数据
+    // 该根节点的初始两个子节点为left和right，初始键值为key
     static byte[] newRootRaw(long left, long right, long key)  {
         SubArray raw = new SubArray(new byte[NODE_SIZE], 0, NODE_SIZE);
 
@@ -107,6 +110,7 @@ public class Node {
         return raw.raw;
     }
 
+    // 生成一个空的根节点数据
     static byte[] newNilRootRaw()  {
         SubArray raw = new SubArray(new byte[NODE_SIZE], 0, NODE_SIZE);
 
@@ -146,6 +150,8 @@ public class Node {
         long siblingUid;
     }
 
+
+    // searchNext 寻找对应 key 的 UID, 如果找不到, 则返回兄弟节点的 UID
     public SearchNextRes searchNext(long key) {
         dataItem.rLock();
         try {
@@ -173,6 +179,8 @@ public class Node {
         long siblingUid;
     }
 
+    // leafSearchRange 方法在当前节点进行范围查找，范围是 [leftKey, rightKey]，
+    // 这里约定如果 rightKey 大于等于该节点的最大的 key, 则还同时返回兄弟节点的 UID，方便继续搜索下一个节点
     public LeafSearchRangeRes leafSearchRange(long leftKey, long rightKey) {
         dataItem.rLock();
         try {
@@ -257,7 +265,8 @@ public class Node {
                 break;
             }
         }
-        if(kth == noKeys && getRawSibling(raw) != 0) return false;
+        if(kth == noKeys && getRawSibling(raw) != 0)
+            return false;
 
         if(getRawIfLeaf(raw)) {
             shiftRawKth(raw, kth);
