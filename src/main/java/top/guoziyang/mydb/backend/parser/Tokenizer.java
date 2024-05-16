@@ -2,6 +2,8 @@ package top.guoziyang.mydb.backend.parser;
 
 import top.guoziyang.mydb.common.Error;
 
+// Tokenizer 类，对语句进行逐字节解析，根据空白符或者词法规则，将语句切割成多个 token。
+// 对外提供了 peek()、pop() 方法方便取出 Token 进行解析
 public class Tokenizer {
     private byte[] stat;
     private int pos;

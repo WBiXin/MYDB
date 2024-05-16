@@ -17,6 +17,9 @@ import top.guoziyang.mydb.backend.parser.statement.Update;
 import top.guoziyang.mydb.backend.parser.statement.Where;
 import top.guoziyang.mydb.common.Error;
 
+// Parser 实现了对类 SQL 语句的结构化解析，将语句中包含的信息封装为对应语句的类
+// Parser 类则直接对外提供了 Parse(byte[] statement) 方法，核心就是一个调用 Tokenizer 类分割 Token，并根据词法规则包装成具体的 Statement 类并返回。
+// 解析过程很简单，仅仅是根据第一个 Token 来区分语句类型，并分别处理
 public class Parser {
     public static Object Parse(byte[] statement) throws Exception {
         Tokenizer tokenizer = new Tokenizer(statement);

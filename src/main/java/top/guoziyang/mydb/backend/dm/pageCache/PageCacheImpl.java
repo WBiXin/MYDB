@@ -1,5 +1,8 @@
 package top.guoziyang.mydb.backend.dm.pageCache;
 
+// 使用NIO模型
+// 缓冲区ByteBuffer：capacity、limit、position、mark
+// 通道FileChannel：文件访问通道。（常用的其他通道：SocketChannel、ServerSocketChannel，TCP通信通道；DatagramChannel，UDP通信通道）
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;

@@ -14,6 +14,13 @@ import top.guoziyang.mydb.transport.Package;
 import top.guoziyang.mydb.transport.Packager;
 import top.guoziyang.mydb.transport.Transporter;
 
+/**
+ * 采用C/S结构，
+ * 支持启动一个服务器，有多个客户端去连接
+ * 通过socket通信，执行SQL返回结果。
+ *
+ * Server 启动一个 ServerSocket 监听端口，当有请求到来时直接把请求丢给一个新线程处理
+ */
 public class Server {
     private int port;
     TableManager tbm;
@@ -49,6 +56,9 @@ public class Server {
     }
 }
 
+/**
+ * HandleSocket 类实现了 Runnable 接口，在建立连接后初始化 Packager，随后就循环接收来自客户端的数据并处理
+ */
 class HandleSocket implements Runnable {
     private Socket socket;
     private TableManager tbm;
@@ -76,6 +86,7 @@ class HandleSocket implements Runnable {
             }
             return;
         }
+        // Executor 调用 Parser 获取到对应语句的结构化信息对象，并根据对象的类型，调用 TBM 的不同方法进行处理
         Executor exe = new Executor(tbm);
         while(true) {
             Package pkg = null;

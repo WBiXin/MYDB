@@ -15,6 +15,9 @@ import top.guoziyang.mydb.backend.vm.VersionManager;
 import top.guoziyang.mydb.backend.vm.VersionManagerImpl;
 import top.guoziyang.mydb.common.Error;
 
+/**
+ * 服务器的启动入口，解析命令行参数
+ */
 public class Launcher {
 
     public static final int port = 9999;
@@ -32,6 +35,7 @@ public class Launcher {
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options,args);
 
+        // 根据参数是 -open 或者 -create，来决定是创建数据库文件还是启动一个已有的数据库
         if(cmd.hasOption("open")) {
             openDB(cmd.getOptionValue("open"), parseMem(cmd.getOptionValue("mem")));
             return;

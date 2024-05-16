@@ -9,7 +9,9 @@ import java.nio.file.StandardCopyOption;
 import top.guoziyang.mydb.backend.utils.Panic;
 import top.guoziyang.mydb.common.Error;
 
-// 记录第一个表的uid
+// 由于 TBM 的表管理，使用的是链表串起的 Table 结构，所以就必须保存一个链表的头节点，即第一个表的 UID，
+// 这样在 MYDB 启动时，才能快速找到表信息
+// 记录第一个表的uid，管理启动信息
 public class Booter {
     public static final String BOOTER_SUFFIX = ".bt";
     public static final String BOOTER_TMP_SUFFIX = ".bt_tmp";
@@ -64,6 +66,10 @@ public class Booter {
         return buf;
     }
 
+    // 为了保证操作的原子性
+    // update 在修改 bt 文件内容时，没有直接对 bt 文件进行修改，
+    // 而是首先将内容写入一个 bt_tmp 文件中，随后将这个文件重命名为 bt 文件。
+    // 以期通过操作系统重命名文件的原子性，来保证操作的原子性
     public void update(byte[] data) {
         File tmp = new File(path + BOOTER_TMP_SUFFIX);
         try {

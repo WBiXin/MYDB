@@ -18,6 +18,11 @@ import top.guoziyang.mydb.backend.utils.Parser;
 import top.guoziyang.mydb.backend.vm.VersionManager;
 import top.guoziyang.mydb.common.Error;
 
+
+/**
+ * TableManager被最外层Server调用，
+ * 以下方法直接返回执行的结果，例如错误信息或结果信息的字节数组
+ */
 public class TableManagerImpl implements TableManager {
     VersionManager vm;
     DataManager dm;

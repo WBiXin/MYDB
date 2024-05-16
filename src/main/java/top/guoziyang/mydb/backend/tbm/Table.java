@@ -23,6 +23,7 @@ import top.guoziyang.mydb.common.Error;
 
 /**
  * Table 维护了表结构
+ * 一个数据库中存在多张表，TBM 使用链表的形式将其组织起来，每一张表都保存一个指向下一张表的 UID
  * 二进制结构如下：
  * [TableName][NextTable]
  * [Field1Uid][Field2Uid]...[FieldNUid]
@@ -47,6 +48,7 @@ public class Table {
         return tb.parseSelf(raw);
     }
 
+    // 创建新表时，采用的头插法
     public static Table createTable(TableManager tbm, long nextUid, long xid, Create create) throws Exception {
         Table tb = new Table(tbm, create.tableName, nextUid);
         for(int i = 0; i < create.fieldName.length; i ++) {
@@ -186,6 +188,7 @@ public class Table {
         return entry;
     }
 
+    // 计算 Where 的范围:Table 类的 parseWhere() 和 calWhere() 方法，以及 Field 类的 calExp() 方法
     private List<Long> parseWhere(Where where) throws Exception {
         long l0=0, r0=0, l1=0, r1=0;
         boolean single = false;
@@ -213,7 +216,7 @@ public class Table {
             if(fd == null) {
                 throw Error.FieldNotFoundException;
             }
-            CalWhereRes res = calWhere(fd, where);
+            CalWhereRes res = calWhere(fd, where);  // 计算Where的范围
             l0 = res.l0; r0 = res.r0;
             l1 = res.l1; r1 = res.r1;
             single = res.single;
@@ -231,6 +234,7 @@ public class Table {
         boolean single;
     }
 
+    // 目前，Where只支持两个条件的"and" 和 "or"
     private CalWhereRes calWhere(Field fd, Where where) throws Exception {
         CalWhereRes res = new CalWhereRes();
         switch(where.logicOp) {

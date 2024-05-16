@@ -14,6 +14,7 @@ import top.guoziyang.mydb.backend.tbm.BeginRes;
 import top.guoziyang.mydb.backend.tbm.TableManager;
 import top.guoziyang.mydb.common.Error;
 
+// Executor 调用 Parser 获取到对应语句的结构化信息对象，并根据对象的类型，调用 TBM 的不同方法进行处理
 public class Executor {
     private long xid;
     TableManager tbm;

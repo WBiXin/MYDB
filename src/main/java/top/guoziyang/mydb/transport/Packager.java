@@ -1,5 +1,9 @@
 package top.guoziyang.mydb.transport;
 
+/**
+ * 结合Encoder和Transporter
+ * 直接对外提供send和receive方法
+ */
 public class Packager {
     private Transporter transpoter;
     private Encoder encoder;
